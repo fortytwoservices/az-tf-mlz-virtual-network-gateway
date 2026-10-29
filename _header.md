@@ -30,6 +30,8 @@ resource types, owned by `az-tf-mlz-connectivity-vwan`.
   them) and each connection (metrics only). A `ReadOnly` lock blocks updates of the locked resource
   itself; remove it before changing the gateway.
 - Creating, changing or deleting a gateway takes up to 45 minutes, so `timeouts` default to 90 minutes.
+  Azure sometimes fails a gateway write with `VmssGatewayDeploymentFailed` ("an intermittent error.
+  Please try again"); `retry` cannot repeat a failed operation, so run the apply again.
 
 ```hcl
 module "virtual_network_gateway" {

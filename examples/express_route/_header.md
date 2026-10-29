@@ -1,7 +1,7 @@
 # ExpressRoute example
 
-A resource group, a virtual network with `GatewaySubnet` and a Log Analytics workspace, then an
-ExpressRoute gateway (`ErGwScale` at one fixed scale unit) whose public IP address Azure assigns and
+A resource group, a virtual network with a /26 `GatewaySubnet` (the least `ErGwScale` takes) and a Log
+Analytics workspace, then an ExpressRoute gateway (`ErGwScale` at one fixed scale unit) whose public IP address Azure assigns and
 manages, with its logs and metrics sent to the workspace. In Sweden Central. It has no connection:
 connecting it needs an ExpressRoute circuit, which is billed by the month.
 

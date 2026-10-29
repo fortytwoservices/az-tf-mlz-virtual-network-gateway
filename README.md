@@ -32,6 +32,8 @@ resource types, owned by `az-tf-mlz-connectivity-vwan`.
   them) and each connection (metrics only). A `ReadOnly` lock blocks updates of the locked resource
   itself; remove it before changing the gateway.
 - Creating, changing or deleting a gateway takes up to 45 minutes, so `timeouts` default to 90 minutes.
+  Azure sometimes fails a gateway write with `VmssGatewayDeploymentFailed` ("an intermittent error.
+  Please try again"); `retry` cannot repeat a failed operation, so run the apply again.
 
 ```hcl
 module "virtual_network_gateway" {
@@ -101,7 +103,7 @@ Type: `string`
 
 ### <a name="input_subnet_id"></a> [subnet\_id](#input\_subnet\_id)
 
-Description: Resource ID of the virtual network's `GatewaySubnet` (/27 or larger). The subnet belongs to the caller (the hub composition creates it); a VPN gateway and an ExpressRoute gateway can share it. Changing it replaces the gateway.
+Description: Resource ID of the virtual network's `GatewaySubnet`: /27 or larger, /26 or larger for `ErGwScale` (Azure: `GatewaySubnetTooSmallForExpressrouteGatewaySku`; Microsoft Learn, "Configure a scalable ExpressRoute gateway"). The subnet belongs to the caller (the hub composition creates it); a VPN gateway and an ExpressRoute gateway can share it. Changing it replaces the gateway.
 
 Type: `string`
 
@@ -566,7 +568,7 @@ Default: `{}`
 
 ### <a name="input_sku"></a> [sku](#input\_sku)
 
-Description: Gateway SKU. VPN: `VpnGw1AZ` to `VpnGw5AZ` (Microsoft Learn, "VPN Gateway SKU consolidation and migration": no new non-AZ gateways since 2025-11-01; `Basic` lacks BGP and active-active and is not for production). ExpressRoute: `ErGw1AZ`, `ErGw2AZ`, `ErGw3AZ` or `ErGwScale` (with `express_route_scale_units`). Azure resizes a gateway in place within its family and generation; it does not downgrade an ExpressRoute gateway.
+Description: Gateway SKU. VPN: `VpnGw1AZ` to `VpnGw5AZ` (Microsoft Learn, "VPN Gateway SKU consolidation and migration": no new non-AZ gateways since 2025-11-01; `Basic` lacks BGP and active-active and is not for production). ExpressRoute: `ErGw1AZ`, `ErGw2AZ`, `ErGw3AZ` or `ErGwScale` (with `express_route_scale_units`, in a `GatewaySubnet` of /26 or larger). Azure resizes a gateway in place within its family and generation; it does not downgrade an ExpressRoute gateway.
 
 Type: `string`
 

@@ -45,7 +45,7 @@ resource "azapi_resource" "gateway_subnet" {
   parent_id = azapi_resource.virtual_network.id
   body = {
     properties = {
-      addressPrefixes = ["10.0.0.0/27"]
+      addressPrefixes = ["10.0.0.0/26"] # ErGwScale needs /26 or larger
     }
   }
 
