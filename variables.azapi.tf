@@ -20,6 +20,7 @@ variable "ignore_body_changes" {
       network_connections            = optional(list(string), [])
       authorization_locks            = optional(list(string), [])
       authorization_role_assignments = optional(list(string), [])
+      insights_diagnostic_settings   = optional(list(string), [])
     }), {})
   })
   default     = {}
@@ -61,6 +62,7 @@ variable "resource_types" {
       network_connections            = optional(string)
       authorization_locks            = optional(string)
       authorization_role_assignments = optional(string)
+      insights_diagnostic_settings   = optional(string)
     }), {})
   })
   default     = {}

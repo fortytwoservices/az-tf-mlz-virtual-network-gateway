@@ -344,6 +344,7 @@ object({
       network_connections            = optional(list(string), [])
       authorization_locks            = optional(list(string), [])
       authorization_role_assignments = optional(list(string), [])
+      insights_diagnostic_settings   = optional(list(string), [])
     }), {})
   })
 ```
@@ -444,7 +445,7 @@ Default: `null`
 Description: (Optional) VPN only: point-to-site (user VPN). Null turns it off.
 
 - `address_space` - Address ranges the VPN clients get addresses from, in CIDR notation; they must not overlap the virtual network or on-premises ranges.
-- `protocols` - (Optional) `OpenVPN`, `IkeV2` and/or `SSTP`. Defaults to `["OpenVPN"]`.
+- `protocols` - (Optional) `OpenVPN`, `IkeV2` and/or `SSTP`, but not `OpenVPN` with `SSTP` (Microsoft Learn: they "can't be enabled together"). Defaults to `["OpenVPN"]`.
 - `entra_id` - (Optional) Microsoft Entra ID authentication in Azure's public cloud (OpenVPN only, with the Azure VPN Client): `tenant_id`, and `audience`, which defaults to the Microsoft-registered Azure VPN Client (`c632b3df-fb67-4d84-bdcf-b95ad541b5c8`; Microsoft Learn, "Configure P2S VPN Gateway for Microsoft Entra ID authentication").
 - `root_certificates` - (Optional) Certificate authentication: trusted root certificates, by name, as their Base64 public data (without the BEGIN and END lines).
 - `revoked_certificates` - (Optional) Revoked client certificates, by name, as their thumbprints.
@@ -504,6 +505,7 @@ object({
       network_connections            = optional(string)
       authorization_locks            = optional(string)
       authorization_role_assignments = optional(string)
+      insights_diagnostic_settings   = optional(string)
     }), {})
   })
 ```

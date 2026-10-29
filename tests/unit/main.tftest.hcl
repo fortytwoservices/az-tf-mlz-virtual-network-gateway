@@ -634,6 +634,29 @@ run "invalid_point_to_site_protocol" {
   expect_failures = [var.point_to_site]
 }
 
+run "openvpn_with_sstp" {
+  command = plan
+
+  variables {
+    point_to_site = { address_space = ["172.16.200.0/24"], protocols = ["OpenVPN", "SSTP"], root_certificates = { root = "MIIB" } }
+  }
+
+  expect_failures = [var.point_to_site]
+}
+
+run "sstp_with_ikev2" {
+  command = plan
+
+  variables {
+    point_to_site = { address_space = ["172.16.200.0/24"], protocols = ["IkeV2", "SSTP"], root_certificates = { root = "MIIB" } }
+  }
+
+  assert {
+    condition     = jsonencode(azapi_resource.this.body.properties.vpnClientConfiguration.vpnClientProtocols) == jsonencode(["IkeV2", "SSTP"])
+    error_message = "SSTP with IKEv2 should be allowed."
+  }
+}
+
 run "invalid_point_to_site_address_space" {
   command = plan
 
