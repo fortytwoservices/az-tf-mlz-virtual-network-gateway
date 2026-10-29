@@ -624,6 +624,34 @@ run "entra_id_without_openvpn" {
   expect_failures = [var.point_to_site]
 }
 
+run "ikev2_with_entra_id_only" {
+  command = plan
+
+  variables {
+    point_to_site = { address_space = ["172.16.200.0/24"], protocols = ["OpenVPN", "IkeV2"], entra_id = { tenant_id = "22222222-2222-2222-2222-222222222222" } }
+  }
+
+  expect_failures = [var.point_to_site]
+}
+
+run "ikev2_with_entra_id_and_certificates" {
+  command = plan
+
+  variables {
+    point_to_site = {
+      address_space     = ["172.16.200.0/24"]
+      protocols         = ["OpenVPN", "IkeV2"]
+      entra_id          = { tenant_id = "22222222-2222-2222-2222-222222222222" }
+      root_certificates = { root = "MIIB" }
+    }
+  }
+
+  assert {
+    condition     = jsonencode(azapi_resource.this.body.properties.vpnClientConfiguration.vpnAuthenticationTypes) == jsonencode(["AAD", "Certificate"])
+    error_message = "IKEv2 with Entra ID and certificates should be allowed."
+  }
+}
+
 run "invalid_point_to_site_protocol" {
   command = plan
 

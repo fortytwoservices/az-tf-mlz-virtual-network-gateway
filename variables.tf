@@ -188,7 +188,7 @@ variable "point_to_site" {
 - `root_certificates` - (Optional) Certificate authentication: trusted root certificates, by name, as their Base64 public data (without the BEGIN and END lines).
 - `revoked_certificates` - (Optional) Revoked client certificates, by name, as their thumbprints.
 
-At least one of `entra_id` and `root_certificates`. An active-active gateway needs a third IP configuration for point-to-site.
+At least one of `entra_id` and `root_certificates`, and both when `IkeV2` is used with Entra ID (Entra ID works over OpenVPN only; Microsoft Learn, "About Point-to-Site VPN"). An active-active gateway needs a third IP configuration for point-to-site.
 DESCRIPTION
 
   validation {
@@ -214,6 +214,10 @@ DESCRIPTION
   validation {
     condition     = var.point_to_site == null ? true : var.point_to_site.entra_id == null || contains(var.point_to_site.protocols, "OpenVPN")
     error_message = "Microsoft Entra ID authentication needs the `OpenVPN` protocol."
+  }
+  validation {
+    condition     = var.point_to_site == null ? true : var.point_to_site.entra_id == null || !contains(var.point_to_site.protocols, "IkeV2") || length(var.point_to_site.root_certificates) > 0
+    error_message = "`IkeV2` with Microsoft Entra ID needs `root_certificates` too: Entra ID works over OpenVPN only, so IKEv2 clients authenticate with certificates."
   }
 }
 

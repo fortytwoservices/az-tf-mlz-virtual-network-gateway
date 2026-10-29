@@ -450,7 +450,7 @@ Description: (Optional) VPN only: point-to-site (user VPN). Null turns it off.
 - `root_certificates` - (Optional) Certificate authentication: trusted root certificates, by name, as their Base64 public data (without the BEGIN and END lines).
 - `revoked_certificates` - (Optional) Revoked client certificates, by name, as their thumbprints.
 
-At least one of `entra_id` and `root_certificates`. An active-active gateway needs a third IP configuration for point-to-site.
+At least one of `entra_id` and `root_certificates`, and both when `IkeV2` is used with Entra ID (Entra ID works over OpenVPN only; Microsoft Learn, "About Point-to-Site VPN"). An active-active gateway needs a third IP configuration for point-to-site.
 
 Type:
 
